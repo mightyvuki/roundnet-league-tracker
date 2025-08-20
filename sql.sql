@@ -8,7 +8,9 @@ CREATE TABLE users (
     prezime VARCHAR(30) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    uloga ENUM('admin', 'user') NOT NULL DEFAULT 'user'
+    uloga ENUM('admin', 'user') NOT NULL DEFAULT 'user',
+    profile_pic VARCHAR(255),
+    gender ENUM('m', 'z') NOT NULL
 );
 
 CREATE TABLE leagues (
