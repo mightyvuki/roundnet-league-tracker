@@ -1,5 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS roundnet_league_manager;
-USE roundnet_league;
+USE roundnet_league_manager;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
