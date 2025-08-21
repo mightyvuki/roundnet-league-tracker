@@ -1,11 +1,42 @@
+<?php
+require_once("includes/db_utils.php");
+session_start();
+
+$db = new DBUtils();
+$error = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $user = $db->checkLogin($username, $password);
+    if ($user) {
+        $_SESSION['user'] = $user;
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $error = "Pogrešno korisničko ime ili lozinka.";
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <a href="test.php">Test</a>
+    <h2>Prijava</h2>
+    <?php if ($error) echo "<p style='color:red;'>$error</p>"; ?>
+    <form method="POST">
+        <label>Korisničko ime:</label>
+        <input type="text" name="username" required><br>
+        <label>Lozinka:</label>
+        <input type="password" name="password" required><br>
+        <button type="submit">Prijavi se</button>
+    </form>
+    <p>Nemate nalog? <a href="register.php">Registrujte se</a></p>
 </body>
 </html>

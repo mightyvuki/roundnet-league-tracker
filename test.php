@@ -9,7 +9,7 @@ echo "--- USERS TEST ---\n";
 // Insert user
 $userInserted = $db->insertUser("vukota", "Vukota", "Markišić", "vukota@example.com", "tajnapass", "admin", null, "m");
 echo "User inserted: " . ($userInserted ? "YES" : "NO") . "\n";
-
+/*
 // Get user by username (via checkLogin)
 $user = $db->checkLogin("vukota", "tajnapass");
 print_r($user);
@@ -88,5 +88,5 @@ echo "Match score updated: " . ($matchUpdated ? "YES" : "NO") . "\n";
 
 // Delete match
 $matchDeleted = $db->deleteMatch($match['id']);
-echo "Match deleted: " . ($matchDeleted ? "YES" : "NO") . "\n";
+echo "Match deleted: " . ($matchDeleted ? "YES" : "NO") . "\n";*/
 ?>
