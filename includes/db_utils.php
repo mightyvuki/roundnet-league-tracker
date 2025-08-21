@@ -56,5 +56,102 @@ class DBUtils {
         $st->execute();
         return $st->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getUserById($id) {
+        try {
+            $sql = "SELECT * FROM " . TBL_USERS . " WHERE " . COL_USER_ID . " = :id";
+            $st = $this->conn->prepare($sql);
+            $st->bindValue(":id", $id, PDO::PARAM_INT);
+            $st->execute();
+            return $st->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getUserByEmail($email) {
+        try {
+            $sql = "SELECT * FROM " . TBL_USERS . " WHERE " . COL_USER_EMAIL . " = :email";
+            $st = $this->conn->prepare($sql);
+            $st->bindValue(":email", $email);
+            $st->execute();
+            return $st->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function updateUser($id, $username, $ime, $prezime, $email, $uloga, $gender, $profile_pic = null, $newPassword = null) {
+        try {
+            // provera unique username/email
+            $sql_check = "SELECT " . COL_USER_ID . " FROM " . TBL_USERS . "
+                        WHERE (" . COL_USER_USERNAME . " = :username OR " . COL_USER_EMAIL . " = :email)
+                        AND " . COL_USER_ID . " <> :id";
+            $st = $this->conn->prepare($sql_check);
+            $st->bindValue(":username", $username, PDO::PARAM_STR);
+            $st->bindValue(":email", $email, PDO::PARAM_STR);
+            $st->bindValue(":id", $id, PDO::PARAM_INT);
+            $st->execute();
+            if ($st->fetch()) return false;
+
+            if ($profile_pic === null || $profile_pic === "") {
+                $profile_pic = ($gender === "z") ? "images/avatar_female.png" : "images/avatar_male.png";
+            }
+
+            $params = [
+                ":id"          => $id,
+                ":username"    => $username,
+                ":ime"         => $ime,
+                ":prezime"     => $prezime,
+                ":email"       => $email,
+                ":uloga"       => $uloga,
+                ":gender"      => $gender,
+                ":profile_pic" => $profile_pic
+            ];
+
+            if ($newPassword !== null && $newPassword !== "") {
+                $hashed = crypt($newPassword, $this->hashing_salt);
+                $sql = "UPDATE " . TBL_USERS . " SET "
+                    . COL_USER_USERNAME . " = :username, "
+                    . COL_USER_IME . " = :ime, "
+                    . COL_USER_PREZIME . " = :prezime, "
+                    . COL_USER_EMAIL . " = :email, "
+                    . COL_USER_ULOGA . " = :uloga, "
+                    . COL_USER_GENDER . " = :gender, "
+                    . COL_USER_PROFILE_PIC . " = :profile_pic, "
+                    . COL_USER_PASSWORD . " = :password
+                    WHERE " . COL_USER_ID . " = :id";
+                $params[":password"] = $hashed;
+            } else {
+                $sql = "UPDATE " . TBL_USERS . " SET "
+                    . COL_USER_USERNAME . " = :username, "
+                    . COL_USER_IME . " = :ime, "
+                    . COL_USER_PREZIME . " = :prezime, "
+                    . COL_USER_EMAIL . " = :email, "
+                    . COL_USER_ULOGA . " = :uloga, "
+                    . COL_USER_GENDER . " = :gender, "
+                    . COL_USER_PROFILE_PIC . " = :profile_pic
+                    WHERE " . COL_USER_ID . " = :id";
+            }
+
+            $st = $this->conn->prepare($sql);
+            return $st->execute($params);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function deleteUser($id) {
+        try {
+            $sql = "DELETE FROM " . TBL_USERS . " WHERE " . COL_USER_ID . " = :id";
+            $st = $this->conn->prepare($sql);
+            $st->bindValue(":id", $id, PDO::PARAM_INT);
+            $st->execute();
+            return $st->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
 }
 ?>

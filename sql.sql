@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS roundnet_league;
+CREATE SCHEMA IF NOT EXISTS roundnet_league_manager;
 USE roundnet_league;
 
 CREATE TABLE users (
@@ -18,8 +18,8 @@ CREATE TABLE leagues (
     naziv VARCHAR(100) NOT NULL,
     godina YEAR NOT NULL,
     opis TEXT,
-    admin_id INT NOT NULL,
-    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
+    admin_id INT,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE rounds (
