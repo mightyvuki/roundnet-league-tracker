@@ -26,10 +26,10 @@ define("COL_ROUND_DATUM", "datum");
 define("TBL_MATCHES", "matches");
 define("COL_MATCH_ID", "id");
 define("COL_MATCH_ROUND_ID", "round_id");
-define("COL_MATCH_TEAM1_PLAYER1", "team1_player1_id");
-define("COL_MATCH_TEAM1_PLAYER2", "team1_player2_id");
-define("COL_MATCH_TEAM2_PLAYER1", "team2_player1_id");
-define("COL_MATCH_TEAM2_PLAYER2", "team2_player2_id");
-define("COL_MATCH_SCORE_TEAM1", "score_team1");
-define("COL_MATCH_SCORE_TEAM2", "score_team2");
+define("COL_MATCH_TEAM1_P1", "team1_player1_id");
+define("COL_MATCH_TEAM1_P2", "team1_player2_id");
+define("COL_MATCH_TEAM2_P1", "team2_player1_id");
+define("COL_MATCH_TEAM2_P2", "team2_player2_id");
+define("COL_MATCH_SCORE1", "score_team1");
+define("COL_MATCH_SCORE2", "score_team2");
 ?>
