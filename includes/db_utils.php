@@ -3,7 +3,7 @@ require_once("constants.php");
 
 class DBUtils {
     private $conn;
-    private $hashing_salt = "~?nocasserastajemo024!@#";
+    //private $hashing_salt = "~?nocasserastajemo024!@#";
 
     public function __construct($configFile = "config.ini") {
         if ($config = parse_ini_file($configFile)) {
@@ -24,7 +24,8 @@ class DBUtils {
             $st->execute();
             if ($st->fetch()) return false; // username vec postoji
 
-            $hashed_password = crypt($password, $this->hashing_salt);
+            //$hashed_password = crypt($password, $this->hashing_salt);
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             if (!$profile_pic) {
                 $profile_pic = $gender === "z" ? "images/avatar_female.png" : "images/avatar_male.png";
@@ -48,14 +49,28 @@ class DBUtils {
     }
 
     public function checkLogin($username, $password) {
-        $hashed_password = crypt($password, $this->hashing_salt);
-        $sql = "SELECT * FROM " . TBL_USERS . " WHERE " . COL_USER_USERNAME . " = :username AND " . COL_USER_PASSWORD . " = :password";
+        //$hashed_password = crypt($password, $this->hashing_salt);
+        $sql = "SELECT * FROM " . TBL_USERS . " WHERE " . COL_USER_USERNAME . " = :username";
         $st = $this->conn->prepare($sql);
         $st->bindValue(":username", $username);
-        $st->bindValue(":password", $hashed_password);
         $st->execute();
-        return $st->fetch(PDO::FETCH_ASSOC);
+        $user = $st->fetch(PDO::FETCH_ASSOC);
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+        return false;
     }
+
+    public function getAllUsers() {
+        try {
+            $sql = "SELECT * FROM " . TBL_USERS;
+            $st = $this->conn->prepare($sql);
+            $st->execute();
+            return $st->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+    }
+}
 
     public function getUserById($id) {
         try {
@@ -110,7 +125,8 @@ class DBUtils {
             ];
 
             if ($newPassword !== null && $newPassword !== "") {
-                $hashed = crypt($newPassword, $this->hashing_salt);
+                //$hashed = crypt($newPassword, $this->hashing_salt);
+                $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
                 $sql = "UPDATE " . TBL_USERS . " SET "
                     . COL_USER_USERNAME . " = :username, "
                     . COL_USER_IME . " = :ime, "
@@ -121,7 +137,7 @@ class DBUtils {
                     . COL_USER_PROFILE_PIC . " = :profile_pic, "
                     . COL_USER_PASSWORD . " = :password
                     WHERE " . COL_USER_ID . " = :id";
-                $params[":password"] = $hashed;
+                $params[":password"] = $hashed_password;
             } else {
                 $sql = "UPDATE " . TBL_USERS . " SET "
                     . COL_USER_USERNAME . " = :username, "
