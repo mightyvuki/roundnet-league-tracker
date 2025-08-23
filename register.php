@@ -32,29 +32,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h2>Registracija</h2>
-    <?php 
-        if ($error) echo "<p style='color:red;'>$error</p>"; 
-        if ($success) echo "<p style='color:green;'>$success</p>"; 
-    ?>
-    <form method="POST">
-        <label>Korisničko ime:</label>
-        <input type="text" name="username" required><br>
-        <label>Ime:</label>
-        <input type="text" name="ime" required><br>
-        <label>Prezime:</label>
-        <input type="text" name="prezime" required><br>
-        <label>Email:</label>
-        <input type="email" name="email" required><br>
-        <label>Lozinka:</label>
-        <input type="password" name="password" required><br>
-        <label>Pol:</label>
-        <select name="gender" required>
-            <option value="m">Muški</option>
-            <option value="z">Ženski</option>
-        </select><br>
-        <button type="submit">Registruj se</button>
-    </form>
-    <p>Već imate nalog? <a href="index.php">Prijavite se</a></p>
+    <?php include("includes/header.html")?>
+    
+    <div id="main">
+        <h2>Registracija</h2>
+        <?php 
+            if ($error) echo "<p style='color:var(--accent);'>$error</p>"; 
+            if ($success) echo "<p style='color:var(--text);'>$success</p>"; 
+        ?>
+        <form method="POST">
+            <label>Korisničko ime:</label>
+            <input type="text" name="username" required><br>
+            <label>Ime:</label>
+            <input type="text" name="ime" required><br>
+            <label>Prezime:</label>
+            <input type="text" name="prezime" required><br>
+            <label>Email:</label>
+            <input type="email" name="email" required><br>
+            <label>Lozinka:</label>
+            <input type="password" name="password" required><br>
+            <label>Pol:</label>
+            <select name="gender" required>
+                <option value="m">Muški</option>
+                <option value="z">Ženski</option>
+            </select><br>
+            <button type="submit">Registruj se</button>
+        </form>
+        <p>Već imate nalog? <a href="index.php">Prijavite se</a></p>
+    </div>
+    
+    <?php include("includes/footer.html")?>
 </body>
 </html>

@@ -1,66 +1,184 @@
-body {
-    background-color: #f4f4f9;
+/* Global */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: hsl(0 0% 0%);
+    --bg: hsl(0 0% 5%);
+    --bg-light: hsl(0 0% 10%);
+
+    --accent: hsl(61.28, 100%, 54.12%);
+    --accent-muted: hsl(61.28, 100%, 44.12%);
+
+    --ff: "Work sans", sans-serif;
+    --text: hsl(0 0% 95%);
+    --text-muted: hsl(0 0% 70%);
+    --highlight: hsl(0 0% 60%);
+
+    --border: hsl(0 0% 30%);
+    --gradient: linear-gradient(0deg, var(--bg) 95%, var(--bg-light));
+    --gradient-hover: linear-gradient(0deg, var(--bg), var(--bg-light));
+    font-family: var(--ff);
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: var(--ff);
+    background: var(--bg-dark);
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    background: var(--gradient-hover);
+    padding: 1rem 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.logo img {
+    height: 4rem;
+    margin: 0;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.btn-login-header {
+    font-family: var(--ff);
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: var(--bg-dark);
+    text-decoration: none;
+    border-radius: 0.3rem;
+    transition: 0.3s ease;
+}
+
+.btn-login-header:hover {
+    background: var(--accent-muted);
+}
+
+#main {
+    flex: 1;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 8px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
-    font-family: sans-serif;
 }
 
 h2 {
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 1.5rem;
+    color: var(--text);
 }
 
 form {
-    background-color: #fff;
-    padding: 25px 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: var(--gradient);
+    padding: 1.5rem 2rem;
+    border: 0.05rem solid var(--border);
+    border-radius: 0.5rem;
     width: 100%;
-    max-width: 350px;
+    max-width: 400px;
+}
+
+form:hover {
+    background: var(--gradient-hover);
 }
 
 form label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #444;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
 }
 
-form input {
-    width: 100%;
-    padding: 8px 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+form input,
+form select {
+    width: 95%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.1rem solid var(--border);
+    border-radius: 0.5rem;
+    background-color: var(--text);
 }
 
 form button {
+    font-family: var(--ff);
     width: 100%;
-    padding: 10px;
-    background-color: #ffc107;
-    color: #333;
+    padding: 0.8rem;
+    background-color: var(--bg-light);
+    color: var(--text-muted);
+    font-size: 1.1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    transition: 250ms;
 }
 
 form button:hover {
-    background-color: #e0a800;
+    background-color: var(--accent);
+    color: var(--bg-dark);
 }
 
 p.error {
     color: red;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 
-a {
-    color: #ffc107;
+#main a {
+    color: var(--accent);
+    text-decoration: underline transparent;
+    transition: 200ms;
+}
+
+#main a:hover {
+    text-decoration: underline var(--accent);
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg);
+    color: var(--text-muted);
+}
+
+.footer-link {
+    color: var(--text-muted);
     text-decoration: none;
+    transition: 0.3s;
 }
 
-a:hover {
-    text-decoration: underline;
+.footer-link:hover {
+    color: var(--accent);
 }
