@@ -167,6 +167,7 @@ class DBUtils {
             return false;
         }
     }
+
     // LIGE
     public function insertLeague($naziv, $godina, $opis, $admin_id) {
         try {
@@ -229,6 +230,12 @@ class DBUtils {
         } catch (PDOException $e) {
             return false;
         }
+    }
+
+    public function getAllLeagues() {
+        $sql = "SELECT * FROM leagues ORDER BY godina DESC, naziv ASC";
+        $st = $this->conn->query($sql);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getLeaguesByAdmin($admin_id) {
@@ -314,7 +321,7 @@ class DBUtils {
         }
     }
 
-    // ********** MATCHES **********
+    // mecevi
 
     public function insertMatch($round_id, $team1_player1_id, $team1_player2_id, $team2_player1_id, $team2_player2_id, $score_team1 = 0, $score_team2 = 0) {
         try {

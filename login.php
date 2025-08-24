@@ -37,7 +37,7 @@
     <div id="main">
         <h2>Prijava</h2>
         <?php if ($error) echo "<p class='error'>" . htmlspecialchars($error) . "</p>"; ?>
-        <form method="POST">
+        <form method="post">
             <label>Korisničko ime:</label>
             <input type="text" name="username" value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>" required><br>
             <label>Lozinka:</label>

@@ -1,17 +1,17 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 ?>
 
 <header>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php"><img src="images/logo.png" alt="Roundnet League Manager Logo"></a>
+            <a href="index.php"><img src="images/logo.png" alt="Roundnet League Lovcenac Logo"></a>
         </div>
         <ul class="nav-links">
             <li><a href="index.php">Početna</a></li>
-            <li><a href="dashboard.php">Kontrolna tabla</a></li>
+            <li><a href="leagues.php">Pregled liga</a></li>
             <li><a href="contact.php">Kontakt</a></li>
         </ul>
         <div class="login">

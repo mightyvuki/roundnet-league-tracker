@@ -1,4 +1,3 @@
-/* Global */
 *,
 *::before,
 *::after {
@@ -158,6 +157,70 @@ h2 {
     color: var(--text);
 }
 
+form button:hover {
+    background-color: var(--accent);
+    color: var(--bg-dark);
+}
+
+p.error {
+    color: red;
+    margin-bottom: 1rem;
+}
+
+#main a {
+    color: var(--accent);
+    text-decoration: underline transparent;
+    transition: 200ms;
+}
+
+#main a:hover {
+    text-decoration: underline var(--accent);
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg);
+    color: var(--text-muted);
+}
+
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-link:hover {
+    color: var(--accent);
+}
+
+.avatar-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    margin: 10px 0;
+}
+
+.avatar-preview img {
+    display: block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 8px 0;
+    border: 2px solid var(--border);
+}
+
+form input[type="file"] {
+    padding: 0.5rem;
+}
+
+.success {
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
 form {
     background: var(--gradient);
     padding: 1.5rem 2rem;
@@ -200,66 +263,63 @@ form button {
     transition: 250ms;
 }
 
-form button:hover {
-    background-color: var(--accent);
-    color: var(--bg-dark);
-}
-
-p.error {
-    color: red;
-    margin-bottom: 1rem;
-}
-
-#main a {
-    color: var(--accent);
-    text-decoration: underline transparent;
-    transition: 200ms;
-}
-
-#main a:hover {
-    text-decoration: underline var(--accent);
-}
-
-footer {
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    background: var(--bg);
-    color: var(--text-muted);
-}
-
-.footer-link {
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.footer-link:hover {
-    color: var(--accent);
-}
-
-.avatar-preview {
+.cards-container {
     display: flex;
-    flex-direction: column; /* Da bi slika bila iznad inputa */
-    align-items: center;   /* Horizontalno centriranje */
-    margin: 10px 0;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 1000px;
 }
 
-.avatar-preview img {
-    display: block;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 8px 0;
-    border: 2px solid var(--border);
+.league-card {
+    background: var(--gradient);
+    border: 0.05rem solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    width: 250px;
+    text-align: center;
+    color: var(--text);
+    transition: transform 0.2s;
 }
 
-form input[type="file"] {
-    padding: 0.5rem;
+.league-card:hover {
+    transform: translateY(-4px);
+    background: var(--gradient-hover);
 }
 
-.success {
+.league-card h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
     color: var(--accent);
-    margin-bottom: 1rem;
+}
+
+.league-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.league-card #viewLeague {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--bg-light);
+    color: var(--text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 250ms;
+    text-decoration: none;
+}
+
+.league-card #viewLeague:hover {
+    text-decoration: none;
+    color: var(--bg-dark);
+    background: var(--accent-muted);
+}
+
+p.no-leagues {
+    color: var(--highlight);
+    margin-top: 2rem;
 }
