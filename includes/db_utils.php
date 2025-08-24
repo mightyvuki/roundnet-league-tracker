@@ -98,7 +98,7 @@ class DBUtils {
 
     public function updateUser($id, $username, $ime, $prezime, $email, $uloga, $gender, $profile_pic = null, $newPassword = null) {
         try {
-            // provera unique username/email
+            // unique username/email
             $sql_check = "SELECT " . COL_USER_ID . " FROM " . TBL_USERS . "
                         WHERE (" . COL_USER_USERNAME . " = :username OR " . COL_USER_EMAIL . " = :email)
                         AND " . COL_USER_ID . " <> :id";
@@ -109,7 +109,7 @@ class DBUtils {
             $st->execute();
             if ($st->fetch()) return false;
 
-            if ($profile_pic === null || $profile_pic === "") {
+            if (empty($profile_pic)) {
                 $profile_pic = ($gender === "z") ? "images/avatar_female.png" : "images/avatar_male.png";
             }
 
@@ -124,8 +124,7 @@ class DBUtils {
                 ":profile_pic" => $profile_pic
             ];
 
-            if ($newPassword !== null && $newPassword !== "") {
-                //$hashed = crypt($newPassword, $this->hashing_salt);
+            if (!empty($newPassword)) {
                 $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
                 $sql = "UPDATE " . TBL_USERS . " SET "
                     . COL_USER_USERNAME . " = :username, "

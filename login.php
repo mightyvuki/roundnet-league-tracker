@@ -1,23 +1,27 @@
 <?php
-require_once("includes/db_utils.php");
-session_start();
+    require_once("includes/db_utils.php");
+    session_start();
 
-$db = new DBUtils();
-$error = "";
+    $db = new DBUtils();
+    $error = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = trim($_POST['username']);
+        if (!preg_match("/^[a-zA-Z0-9_]{4,25}$/", $username)) {
+            $error = "Korisničko ime može sadržati samo slova, brojeve i donje crte (4-25 karaktera).";
+        } else {
+            $password = $_POST['password'];
 
-    $user = $db->checkLogin($username, $password);
-    if ($user) {
-        $_SESSION['user'] = $user;
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        $error = "Pogrešno korisničko ime ili lozinka.";
+            $user = $db->checkLogin($username, $password);
+            if ($user) {
+                $_SESSION['user'] = $user;
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                $error = "Pogrešno korisničko ime ili lozinka.";
+            }
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -32,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     <div id="main">
         <h2>Prijava</h2>
-        <?php if ($error) echo "<p class='error'>$error</p>"; ?>
+        <?php if ($error) echo "<p class='error'>" . htmlspecialchars($error) . "</p>"; ?>
         <form method="POST">
             <label>Korisničko ime:</label>
-            <input type="text" name="username" required><br>
+            <input type="text" name="username" value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>" required><br>
             <label>Lozinka:</label>
             <input type="password" name="password" required><br>
             <button type="submit">Prijavi se</button>
