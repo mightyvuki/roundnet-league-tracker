@@ -71,6 +71,61 @@ header {
     color: var(--accent);
 }
 
+.user-info {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.user-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s;
+}
+
+.user-trigger .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.user-trigger:hover {
+    transform: scale(1.05);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--text);
+    border-radius: 8px;
+    padding: 10px;
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown-menu a {
+    display: block;
+    text-decoration: none;
+    padding: 8px 12px;
+    color: var(--bg-dark);
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background: var(--text-muted);
+}
+
+
+.user-info:hover .dropdown-menu {
+    display: block;
+}
+
 .btn-login-header {
     font-family: var(--ff);
     padding: 0.5rem 1rem;

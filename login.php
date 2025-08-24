@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include("includes/header.html")?>
+    <?php include("includes/header.php")?>
     
     <div id="main">
         <h2>Prijava</h2>

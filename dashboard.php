@@ -2,7 +2,6 @@
 require_once("includes/db_utils.php");
 session_start();
 
-// Provera da li je korisnik ulogovan
 if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
@@ -11,7 +10,6 @@ if (!isset($_SESSION['user'])) {
 $db = new DBUtils();
 $user = $_SESSION['user'];
 
-// Dobavljanje liga koje korisnik administrira
 $leagues = $db->getLeaguesByAdmin($user['id']);
 ?>
 
@@ -23,7 +21,13 @@ $leagues = $db->getLeaguesByAdmin($user['id']);
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h2>Dobrodošao, <?php echo htmlspecialchars($user['ime']); ?>!</h2>
+    <?php include("includes/header.php")?>
+    
+    <div id="main">
+
+    <h2>
+        <?php echo $user['uloga'] == 'm' ?  "Dobrodošao, " : "Dobrodošla, "; 
+        echo htmlspecialchars($user['ime']); ?>!</h2>
     <p>Uloga: <?php echo htmlspecialchars($user['uloga']); ?></p>
     <a href="logout.php">Odjavi se</a>
 

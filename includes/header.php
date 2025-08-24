@@ -1,0 +1,35 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.php"><img src="images/logo.png" alt="Roundnet League Manager Logo"></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.php">Početna</a></li>
+            <li><a href="dashboard.php">Kontrolna tabla</a></li>
+            <li><a href="contact.php">Kontakt</a></li>
+        </ul>
+        <div class="login">
+            <?php if (isset($_SESSION['user'])): ?>
+                <div class="user-info">
+                    <div class="user-trigger">
+                        <img src="<?php echo $_SESSION['user']['profile_pic']; ?>" 
+                            alt="Profilna slika" class="avatar">
+                        <span><?php echo htmlspecialchars($_SESSION['user']['ime']); ?></span>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="edit_profile.php" class="btn-edit">Izmeni profil</a>
+                        <a href="logout.php" class="btn-logout">Odjava</a>
+                    </div>
+                </div>
+            <?php else: ?>
+                <a href="login.php" class="btn-login-header">Prijava</a>
+            <?php endif; ?>
+        </div>
+    </nav>
+</header>
