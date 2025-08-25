@@ -1,48 +1,44 @@
-<?php
-require_once("includes/db_utils.php");
-session_start();
-
-$db = new DBUtils();
-$error = "";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $user = $db->checkLogin($username, $password);
-    if ($user) {
-        $_SESSION['user'] = $user;
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        $error = "Pogrešno korisničko ime ili lozinka.";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Početna</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include("includes/header.php")?>
-    
-    <div id="main">
-        <h2>Prijava</h2>
-        <?php if ($error) echo "<p class='error'>$error</p>"; ?>
-        <form method="POST">
-            <label>Korisničko ime:</label>
-            <input type="text" name="username" required><br>
-            <label>Lozinka:</label>
-            <input type="password" name="password" required><br>
-            <button type="submit">Prijavi se</button>
-        </form>
-        <p>Nemate nalog? <a href="register.php">Registrujte se</a></p>
+    <?php include("includes/header.php"); ?>
+
+    <div class="hero">
+        <h1>Dobrodošli u Roundnet League Manager</h1>
+        <p>Aplikacija za jednostavno vođenje roundnet liga, organizaciju timova i praćenje svih rezultata na jednom mestu.</p>
     </div>
 
-    <?php include("includes/footer.html")?>
+    <div class="sections">
+        <div class="section">
+            <img src="images/image01.png" alt="Slika 1">
+            <div class="text">
+                <h2>Organizujte lige</h2>
+                <p>Kreirajte svoje lige, dodajte timove i definišite raspored utakmica. Sistem automatski vodi računa o kolima i tabelama, tako da se možete fokusirati na igru.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <img src="images/image02.png" alt="Slika 2">
+            <div class="text">
+                <h2>Pratite rezultate</h2>
+                <p>Unosite rezultate odmah nakon meča i pratite ažurirane tabele uživo. Sve promene su odmah vidljive svim učesnicima lige.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <img src="images/image03.png" alt="Slika 3">
+            <div class="text">
+                <h2>Uživajte u igri</h2>
+                <p>Zaboravite na komplikacije oko vođenja turnira i liga. Mi brinemo o detaljima, a vi se fokusirajte na ono što je najbitnije – igru i druženje.</p>
+            </div>
+        </div>
+    </div>
+
+    <?php include("includes/footer.html"); ?>
 </body>
 </html>

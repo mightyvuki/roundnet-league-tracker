@@ -46,13 +46,12 @@
                 echo "<table border='1' cellpadding='5' cellspacing='0'>";
                 echo "<tr><th>Tim 1</th><th>Tim 2</th><th>Rezultat</th></tr>";
                 foreach ($matches as $match) {
-                    // povuci imena i prezimena igrača iz DBUtils
                     $t1_ids = $match->getTeam1();
                     $t2_ids = $match->getTeam2();
 
                     $t1_players = [];
                     foreach ($t1_ids as $uid) {
-                        $u = $match->db->getUserById($uid); // DBUtils metoda getUserById
+                        $u = $match->db->getUserById($uid);
                         $t1_players[] = $u['ime'] . " " . strtoupper(substr($u['prezime'], 0, 1)) . ".";
                     }
 
