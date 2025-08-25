@@ -1,69 +1,124 @@
 <?php
-require_once("includes/db_utils.php");
-require_once("classes/League.php");
-require_once("classes/Round.php");
-require_once("classes/GameMatch.php");
+    require_once("includes/db_utils.php");
+    require_once("classes/League.php");
+    require_once("classes/Round.php");
+    require_once("classes/GameMatch.php");
+    session_start();
 
-session_start();
+    if (!isset($_SESSION['user'])) {
+        header("Location: index.php");
+        exit();
+    }
 
-if (!isset($_SESSION['user'])) {
-    header("Location: index.php");
-    exit();
-}
-
-$db = new DBUtils();
-$user = $_SESSION['user'];
-
-// Dummy test objekti (bez baze)
-$testLeague = new League();
-$testLeague->setNaziv("Test Liga");
-$testLeague->setGodina(2025);
-$testLeague->setOpis("Ovo je test liga.");
-$testLeague->setAdminId($user['id']);
-
-$testRound = new Round();
-$testRound->setLeagueId(1);
-$testRound->setBrojKola(1);
-$testRound->setDatum("2025-08-25");
-
-$testMatch = new GameMatch();
-$testMatch->setRoundId(1);
-$testMatch->setTeam1(1, 2);
-$testMatch->setTeam2(3, 4);
-$testMatch->setScore(21, 15);
+    $db = new DBUtils();
+    $user = $_SESSION['user'];
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Test</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include("includes/header.php") ?>
+<?php include("includes/header.php") ?>
 
-    <div id="main">
-        <h2>
-            <?php echo $user['uloga'] == 'm' ? "Dobrodošao, " : "Dobrodošla, ";
-            echo htmlspecialchars($user['ime']); ?>!
-        </h2>
-        <p>Uloga: <?= htmlspecialchars($user['uloga']) ?></p>
-        <a href="logout.php">Odjavi se</a>
+<div id="main">
+    <h2>
+        <?= ($user['gender'] === 'm' ? "Dobrodošao, " : "Dobrodošla, ") . htmlspecialchars($user['ime']); ?>!
+    </h2>
 
-        <h3>Test prikaz klasa</h3>
-        <div class="test-section">
-            <h4>League</h4>
-            <?= $testLeague->getHtml() ?>
+    <p>Uloga: <?= htmlspecialchars($user['uloga']) ?></p>
+    <a href="logout.php">Odjavi se</a>
 
-            <h4>Round</h4>
-            <?= $testRound->getHtml() ?>
+    <?php if ($user['uloga'] === 'admin'): ?>
+        <h3>Moje lige</h3>
+        <?php
+        $leagues = $db->getLeaguesByAdmin($user['id']);
+        if (empty($leagues)) {
+            echo "<p>Niste kreirali nijednu ligu.</p>";
+        } else {
+            echo "<ul>";
+            foreach ($leagues as $leagueData) {
+                $league = new League($leagueData['id']);
+                echo "<li><a href='view_league.php?id={$leagueData['id']}'>" 
+                     . htmlspecialchars($league->getNaziv()) 
+                     . " ({$league->getGodina()})</a></li>";
+            }
+            echo "</ul>";
+        }
+        ?>
+    <?php else: ?>
+        <h3>Lige u kojima učestvujem</h3>
+        <?php
+        $allLeagues = $db->getAllLeagues();
+        $userLeagues = [];
 
-            <h4>Match</h4>
-            <?= $testMatch->getHtml() ?>
-        </div>
-    </div>
+        foreach ($allLeagues as $leagueData) {
+            $league = new League($leagueData['id']);
+            $rounds = $league->getRounds();
+            $hasMatch = false;
 
-    <?php include("includes/footer.html") ?>
+            foreach ($rounds as $round) {
+                $matches = $round->getMatches();
+                foreach ($matches as $match) {
+                    if (in_array($user['id'], $match->getTeam1()) || in_array($user['id'], $match->getTeam2())) {
+                        $hasMatch = true;
+                        break 2;
+                    }
+                }
+            }
+
+            if ($hasMatch) {
+                $userLeagues[] = $league;
+            }
+        }
+
+        if (empty($userLeagues)) {
+            echo "<p>Trenutno ne učestvujete ni u jednoj ligi.</p>";
+        } else {
+            foreach ($userLeagues as $league) {
+                echo "<h4>" . htmlspecialchars($league->getNaziv()) . " ({$league->getGodina()})</h4>";
+                $rounds = $league->getRounds();
+                foreach ($rounds as $round) {
+                    $matches = $round->getMatches();
+                    $userMatches = [];
+                    foreach ($matches as $match) {
+                        if (in_array($user['id'], $match->getTeam1()) || in_array($user['id'], $match->getTeam2())) {
+                            $userMatches[] = $match;
+                        }
+                    }
+                    if ($userMatches) {
+                        echo "<h5>Kolo " . $round->getBrojKola() . " - " . htmlspecialchars($round->getDatum()) . "</h5>";
+                        echo "<table border='1' cellpadding='5' cellspacing='0' class='tabela'>";
+                        echo "<tr><th>Tim 1</th><th>Rezultat</th><th>Tim 2</th></tr>";
+                        foreach ($userMatches as $match) {
+                            $t1_players = array_map(function($uid) use ($db) {
+                                $u = $db->getUserById($uid);
+                                return $u['ime'] . " " . strtoupper(substr($u['prezime'],0,1)) . ".";
+                            }, $match->getTeam1());
+
+                            $t2_players = array_map(function($uid) use ($db) {
+                                $u = $db->getUserById($uid);
+                                return $u['ime'] . " " . strtoupper(substr($u['prezime'],0,1)) . ".";
+                            }, $match->getTeam2());
+
+                            echo "<tr>
+                                    <td class='tim'>" . implode(" & ", $t1_players) . "</td>
+                                    <td class='rezultat'>{$match->getScoreTeam1()} : {$match->getScoreTeam2()}</td>
+                                    <td class='tim'>" . implode(" & ", $t2_players) . "</td>
+                                  </tr>";
+                        }
+                        echo "</table>";
+                    }
+                }
+            }
+        }
+        ?>
+    <?php endif; ?>
+</div>
+
+<?php include("includes/footer.html") ?>
 </body>
 </html>

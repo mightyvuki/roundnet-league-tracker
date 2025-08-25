@@ -43,8 +43,8 @@
             if (empty($matches)) {
                 echo "<p>Nema mečeva u ovom kolu.</p>";
             } else {
-                echo "<table border='1' cellpadding='5' cellspacing='0'>";
-                echo "<tr><th>Tim 1</th><th>Tim 2</th><th>Rezultat</th></tr>";
+                echo "<table class='tabela'>";
+                echo "<tr><th class='tim'>Tim 1</th><th class='rezultat'>Rezultat</th><th class='tim'>Tim 2</th></tr>";
                 foreach ($matches as $match) {
                     $t1_ids = $match->getTeam1();
                     $t2_ids = $match->getTeam2();
@@ -65,9 +65,9 @@
                     $team2_str = implode(" & ", $t2_players);
 
                     echo "<tr>
-                            <td>{$team1_str}</td>
-                            <td>{$team2_str}</td>
-                            <td>{$match->getScoreTeam1()} : {$match->getScoreTeam2()}</td>
+                            <td class='tim'>{$team1_str}</td>
+                            <td class='rezultat'>{$match->getScoreTeam1()} : {$match->getScoreTeam2()}</td>
+                            <td class='tim'>{$team2_str}</td>
                         </tr>";
                 }
                 echo "</table>";
