@@ -16,6 +16,8 @@
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_COOKIE['username_reg'])) 
+            setcookie("username_reg", "", time() - 3600);
         $username = trim($_POST['username']);
         if (!preg_match("/^[a-zA-Z0-9_]{4,25}$/", $username)) {
             $error = "Korisničko ime može sadržati samo slova, brojeve i donje crte (4-25 karaktera).";
@@ -28,10 +30,10 @@
                 $_SESSION['user'] = $user;
 
                 if ($remember) {
-                    setcookie("remember_me", $user['id'], time() + (86400*30), "/"); 
+                    setcookie("remember_me", $user['id'], time() + (86400*30)); 
                 } else {
                     if (isset($_COOKIE['remember_me'])) {
-                        setcookie("remember_me", "", time() - 3600, "/");
+                        setcookie("remember_me", "", time() - 3600);
                     }
                 }
 
@@ -59,7 +61,10 @@
         <?php if ($error) echo "<p class='error'>" . htmlspecialchars($error) . "</p>"; ?>
         <form method="post">
             <label>Korisničko ime:</label>
-            <input type="text" name="username" value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>" required><br>
+            <input type="text" name="username" value="<?=
+                isset($_COOKIE['username_reg']) ? htmlspecialchars($_COOKIE['username_reg']) :
+                (isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '')
+            ?>" required><br>
 
             <label>Lozinka:</label>
             <input type="password" name="password" required><br>

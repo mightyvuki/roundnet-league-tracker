@@ -388,6 +388,31 @@ class DBUtils {
         }
     }
 
+    public function updateMatch($id, $team1_ids, $team2_ids, $score_team1, $score_team2) {
+        try {
+            $sql = "UPDATE " . TBL_MATCHES . " SET "
+                . COL_MATCH_TEAM1_P1 . " = :t1p1, "
+                . COL_MATCH_TEAM1_P2 . " = :t1p2, "
+                . COL_MATCH_TEAM2_P1 . " = :t2p1, "
+                . COL_MATCH_TEAM2_P2 . " = :t2p2, "
+                . COL_MATCH_SCORE1 . " = :score1, "
+                . COL_MATCH_SCORE2 . " = :score2
+                WHERE " . COL_MATCH_ID . " = :id";
+
+            $st = $this->conn->prepare($sql);
+            $st->bindValue(":t1p1", $team1_ids[0], PDO::PARAM_INT);
+            $st->bindValue(":t1p2", $team1_ids[1], PDO::PARAM_INT);
+            $st->bindValue(":t2p1", $team2_ids[0], PDO::PARAM_INT);
+            $st->bindValue(":t2p2", $team2_ids[1], PDO::PARAM_INT);
+            $st->bindValue(":score1", $score_team1, PDO::PARAM_INT);
+            $st->bindValue(":score2", $score_team2, PDO::PARAM_INT);
+            $st->bindValue(":id", $id, PDO::PARAM_INT);
+            return $st->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function deleteMatch($id) {
         try {
             $sql = "DELETE FROM " . TBL_MATCHES . " WHERE " . COL_MATCH_ID . " = :id";

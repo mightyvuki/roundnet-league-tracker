@@ -8,6 +8,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username']);
+        setcookie("username_reg", $username, time() + (86400*30));
         $ime = trim($_POST['ime']);
         $prezime = trim($_POST['prezime']);
         $email = trim($_POST['email']);
@@ -32,7 +33,7 @@
         else {
             $insert = $db->insertUser($username, $ime, $prezime, $email, $password, "user", null, $gender);
             if ($insert) {
-                $success = "Uspešno ste se registrovali! <a href='index.php'>Prijavite se</a>";
+                $success = "Uspešno ste se registrovali! <a href='login.php'>Prijavite se</a>";
             } else {
                 $error = "Korisničko ime ili email već postoji.";
             }

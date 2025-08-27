@@ -6,7 +6,7 @@
     session_start();
 
     if (!isset($_SESSION['user'])) {
-        header("Location: index.php");
+        header("Location: login.php");
         exit();
     }
 
@@ -31,26 +31,65 @@
 
     <p>Uloga: <?= htmlspecialchars($user['uloga']) ?></p>
     <a href="logout.php">Odjavi se</a>
-
     <?php if ($user['uloga'] === 'admin'): ?>
+    <hr>
         <h3>Moje lige</h3>
-        <?php
+    <?php
+        if (isset($_GET['delete_league'])) {
+            $db->deleteLeague($_GET['delete_league']);
+            header("Location: dashboard.php");
+            exit();
+        }
+
         $leagues = $db->getLeaguesByAdmin($user['id']);
         if (empty($leagues)) {
             echo "<p>Niste kreirali nijednu ligu.</p>";
         } else {
-            echo "<ul>";
+            echo '<div class="cards-container">';
             foreach ($leagues as $leagueData) {
                 $league = new League($leagueData['id']);
-                echo "<li><a href='view_league.php?id={$leagueData['id']}'>" 
-                     . htmlspecialchars($league->getNaziv()) 
-                     . " ({$league->getGodina()})</a></li>";
+                ?>
+                <div class="league-card">
+                    <h3><?= htmlspecialchars($league->getNaziv()) . " ({$league->getGodina()})" ?></h3>
+                    <p><?= htmlspecialchars($league->getOpis()) ?></p>
+                    <a id="viewLeague" href="edit_league.php?id=<?= $league->getId() ?>">Uredi ligu</a> <br><br><br>
+                    <a id="viewLeague" class="del" href="?delete_league=<?= $league->getId() ?>" 
+                    onclick="return confirm('Da li ste sigurni da želite obrisati ligu?')">
+                    Obriši ligu
+                    </a>
+                </div>
+                <?php
             }
-            echo "</ul>";
+            echo '</div>';
+        }
+
+        if (isset($_POST['add_league'])) {
+            $naziv = $_POST['naziv'];
+            $godina = $_POST['godina'];
+            $opis = $_POST['opis'];
+
+            $db->insertLeague($naziv, $godina, $opis, $user['id']);
+            header("Location: dashboard.php");
+            exit();
         }
         ?>
+        <br><hr>
+        <h3>Dodaj novu ligu</h3>
+        <form method="post">
+            <label for="naziv">Naziv:</label>
+            <input type="text" name="naziv" id="naziv" required>
+
+            <label for="godina">Godina:</label>
+            <input type="number" name="godina" id="godina" min="2022" max="2030" required>
+
+            <label for="opis">Opis:</label>
+            <textarea name="opis" id="opis"></textarea>
+
+            <button type="submit" name="add_league">Dodaj ligu</button>
+        </form><br><br>
     <?php else: ?>
-        <h3>Lige u kojima učestvujem</h3>
+        <br><hr>
+        <h2>Lige u kojima učestvujete:</h2>
         <?php
         $allLeagues = $db->getAllLeagues();
         $userLeagues = [];
@@ -79,6 +118,7 @@
             echo "<p>Trenutno ne učestvujete ni u jednoj ligi.</p>";
         } else {
             foreach ($userLeagues as $league) {
+                echo "<br><hr>";
                 echo "<h4>" . htmlspecialchars($league->getNaziv()) . " ({$league->getGodina()})</h4>";
                 $rounds = $league->getRounds();
                 foreach ($rounds as $round) {
@@ -113,6 +153,7 @@
                         echo "</table>";
                     }
                 }
+                
             }
         }
         ?>

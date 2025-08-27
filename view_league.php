@@ -30,48 +30,53 @@
 <?php include("includes/header.php") ?>
 
 <div id="main">
-    <h2><?= htmlspecialchars($league->getNaziv()) ?> (<?= $league->getGodina() ?>)</h2>
+    <h2 class="naslov-lige"><?= htmlspecialchars($league->getNaziv()) ?> (<?= $league->getGodina() ?>)</h2>
     <p><?= htmlspecialchars($league->getOpis()) ?></p>
 
     <?php if (empty($rounds)): ?>
         <p>Nema kola u ovoj ligi.</p>
     <?php else: ?>
         <?php foreach ($rounds as $round): ?>
-            <h3>Kolo <?= $round->getBrojKola() ?> - <?= htmlspecialchars($round->getDatum()) ?></h3>
             <?php
-            $matches = $round->getMatches();
-            if (empty($matches)) {
-                echo "<p>Nema mečeva u ovom kolu.</p>";
-            } else {
-                echo "<table class='tabela'>";
-                echo "<tr><th class='tim'>Tim 1</th><th class='rezultat'>Rezultat</th><th class='tim'>Tim 2</th></tr>";
-                foreach ($matches as $match) {
-                    $t1_ids = $match->getTeam1();
-                    $t2_ids = $match->getTeam2();
+                $datum = new DateTime($round->getDatum());
+                $datum_formatirano = $datum->format('j.n.Y');
+                // iz nekog razloga mi daje error kad ubacim i ovu liniju ispod pa sam ovako sotavio
+            ?>
+            <h3>Kolo <?= $round->getBrojKola() ?> - <?= $datum_formatirano ?></h3> 
+            <?php
+                $matches = $round->getMatches();
+                if (empty($matches)) {
+                    echo "<p>Nema mečeva u ovom kolu.</p>";
+                } else {
+                    echo "<table class='tabela'>";
+                    echo "<tr><th class='tim'>Tim 1</th><th class='rezultat'>Rezultat</th><th class='tim'>Tim 2</th></tr>";
+                    foreach ($matches as $match) {
+                        $t1_ids = $match->getTeam1();
+                        $t2_ids = $match->getTeam2();
 
-                    $t1_players = [];
-                    foreach ($t1_ids as $uid) {
-                        $u = $match->db->getUserById($uid);
-                        $t1_players[] = $u['ime'] . " " . strtoupper(substr($u['prezime'], 0, 1)) . ".";
+                        $t1_players = [];
+                        foreach ($t1_ids as $uid) {
+                            $u = $match->db->getUserById($uid);
+                            $t1_players[] = $u['ime'] . " " . strtoupper(substr($u['prezime'], 0, 1)) . ".";
+                        }
+
+                        $t2_players = [];
+                        foreach ($t2_ids as $uid) {
+                            $u = $match->db->getUserById($uid);
+                            $t2_players[] = $u['ime'] . " " . strtoupper(substr($u['prezime'], 0, 1)) . ".";
+                        }
+
+                        $team1_str = implode(" & ", $t1_players);
+                        $team2_str = implode(" & ", $t2_players);
+
+                        echo "<tr>
+                                <td class='tim'>{$team1_str}</td>
+                                <td class='rezultat'>{$match->getScoreTeam1()} : {$match->getScoreTeam2()}</td>
+                                <td class='tim'>{$team2_str}</td>
+                            </tr>";
                     }
-
-                    $t2_players = [];
-                    foreach ($t2_ids as $uid) {
-                        $u = $match->db->getUserById($uid);
-                        $t2_players[] = $u['ime'] . " " . strtoupper(substr($u['prezime'], 0, 1)) . ".";
-                    }
-
-                    $team1_str = implode(" & ", $t1_players);
-                    $team2_str = implode(" & ", $t2_players);
-
-                    echo "<tr>
-                            <td class='tim'>{$team1_str}</td>
-                            <td class='rezultat'>{$match->getScoreTeam1()} : {$match->getScoreTeam2()}</td>
-                            <td class='tim'>{$team2_str}</td>
-                        </tr>";
+                    echo "</table>";
                 }
-                echo "</table>";
-            }
             ?>
         <?php endforeach; ?>
     <?php endif; ?>

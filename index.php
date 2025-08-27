@@ -9,8 +9,8 @@
     <?php include("includes/header.php"); ?>
 
     <div class="hero">
-        <h1>Dobrodošli u Roundnet League Manager</h1>
-        <p>Aplikacija za jednostavno vođenje roundnet liga, organizaciju timova i praćenje svih rezultata na jednom mestu.</p>
+        <h1>Da, <span>Roundnet</span> je stigao u Srbiju!</h1>
+        <p>Predstavljamo vam aplikaciju za jednostavno vođenje roundnet liga, organizaciju timova i praćenje svih rezultata na jednom mestu.</p>
     </div>
 
     <div class="sections">

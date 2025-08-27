@@ -12,7 +12,13 @@
         <ul class="nav-links">
             <li><a href="index.php">Početna</a></li>
             <li><a href="leagues.php">Pregled liga</a></li>
-            <li><a href="contact.php">Kontakt</a></li>
+            <li><a href="dashboard.php" class="btn-edit">
+                <?php 
+                    if(!isset($_SESSION['user'])) echo "Moji mečevi";
+                    else 
+                        echo ($_SESSION['user']['uloga'] == 'user' ? "Moji mečevi" : "Kontrolna tabla");
+                ?>
+            </a></li>
         </ul>
         <div class="login">
             <?php if (isset($_SESSION['user'])): ?>

@@ -1,6 +1,4 @@
-*,
-*::before,
-*::after {
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
@@ -11,8 +9,9 @@
 
     --accent: hsl(61.28, 100%, 54.12%);
     --accent-muted: hsl(61.28, 100%, 44.12%);
+    --alert: hsl(0, 100%, 54.12%);
 
-    --ff: "Work sans", sans-serif;
+    --ff: "Work sans", "Inter", sans-serif;
     --text: hsl(0 0% 95%);
     --text-muted: hsl(0 0% 70%);
     --highlight: hsl(0 0% 60%);
@@ -157,9 +156,26 @@ h2 {
     color: var(--text);
 }
 
+.naslov-lige {
+    text-align: center;
+}
+
 form button:hover {
     background-color: var(--accent);
     color: var(--bg-dark);
+}
+
+form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.1rem solid var(--border);
+    border-radius: 0.5rem;
+    background-color: var(--text);
+    font-family: var(--ff);
+    font-size: 1rem;
+    resize: vertical;
 }
 
 p.error {
@@ -175,6 +191,11 @@ p.error {
 
 #main a:hover {
     text-decoration: underline var(--accent);
+}
+
+.hero span {
+    color: var(--accent);
+    font-style: italic;
 }
 
 .hero {
@@ -319,7 +340,7 @@ form label {
 
 form input,
 form select {
-    width: 95%;
+    width: 100%;
     padding: 0.5rem;
     margin-bottom: 1rem;
     border: 0.1rem solid var(--border);
@@ -409,7 +430,7 @@ p.no-leagues {
     overflow: hidden;
     background: var(--gradient);
     box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    table-layout: fixed; /* bitno da radi width na kolonama */
+    table-layout: fixed;
 }
 
 .tabela th {
@@ -455,4 +476,77 @@ p.no-leagues {
     font-weight: 700;
     color: var(--accent);
     font-size: 1.1rem;
+}
+
+.rezultat-td {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.rezultat-td input[type="hidden"]{
+    display: none;
+}
+
+.rezultat-td input{
+    font-family: var(--ff);
+    padding: 0.6rem;
+    font-size: 1rem;
+    background-color: var(--bg-light);
+    color: var(--text-muted);
+    border: none;
+    border-radius: 10px;
+    transition: 250ms;
+}
+
+.update_match {
+    font-family: var(--ff);
+    width: fit-content;
+    padding: 1rem;
+    background-color: var(--bg-light);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 250ms;
+}
+
+.update_match:hover {
+    background-color: var(--accent);
+    color: var(--bg-dark);
+}
+
+.rezultat-forma {
+    border: none;
+    background: none;
+    padding: 0.5rem;
+}
+
+.rezultat-td {
+    display: inline-block;
+    margin: 0 auto;
+    align-items: center;
+
+    gap: 0.5rem;
+    width: 100%;
+}
+
+#viewLeague.del:hover {
+    background-color: var(--alert)
+}
+
+hr {
+    border: none;
+    height: 2px;
+    width: 300%;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--border),
+        transparent
+    );
+    margin: 2rem 0;
+    opacity: 0.5;
 }
